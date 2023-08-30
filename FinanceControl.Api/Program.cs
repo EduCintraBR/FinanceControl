@@ -1,5 +1,7 @@
 using FinanceControl.Api.Data;
 using FinanceControl.Api.Models;
+using FinanceControl.Api.Services;
+using FinanceControl.Api.Services.IServices;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,6 +16,8 @@ builder.Services.AddDbContext<FCDbContext>(options =>
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<FCDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<ICartaoService, CartaoService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
