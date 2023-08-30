@@ -1,5 +1,8 @@
 using FinanceControl.Api.Data;
+using FinanceControl.Api.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,8 +11,11 @@ builder.Services.AddDbContext<FCDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FCDbContext"));
 });
 
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<FCDbContext>()
+    .AddDefaultTokenProviders();
+
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
