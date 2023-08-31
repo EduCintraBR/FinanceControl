@@ -1,5 +1,7 @@
-﻿using FinanceControl.Api.Data;
+﻿using AutoMapper;
+using FinanceControl.Api.Data;
 using FinanceControl.Api.Models;
+using FinanceControl.Api.Models.Dto;
 using FinanceControl.Api.Services.IServices;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,35 +10,56 @@ namespace FinanceControl.Api.Services
     public class CartaoService : ICartaoService
     {
         private readonly FCDbContext _db;
+        private readonly IMapper _mapper;
 
-        public CartaoService(FCDbContext db)
+        public CartaoService(FCDbContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
-        public Task<Cartao> Alterar(int id, Cartao entity)
+        public async Task<CartaoDto> Alterar(CartaoDto entity)
         {
-            throw new NotImplementedException();
+            var cartaoToUpdate = _mapper.Map<Cartao>(entity);
+
+            _db.Cartoes.Update(cartaoToUpdate);
+            await _db.SaveChangesAsync();
+
+            return entity;
         }
 
-        public Task<Cartao> Criar(Cartao entity)
+        public async Task<CartaoDto> Criar(CartaoDto entity)
         {
-            throw new NotImplementedException();
+            var cartaoToInsert = _mapper.Map<Cartao>(entity);
+
+            await _db.Cartoes.AddAsync(cartaoToInsert);
+            await _db.SaveChangesAsync();
+
+            return entity;
         }
 
-        public Task<Cartao> Deletar(int id)
+        public async Task Deletar(int id)
         {
-            throw new NotImplementedException();
+            var cartao = await _db.Cartoes.FirstAsync(x => x.Id == id);
+            if (cartao is null) 
+            {
+                throw new ArgumentException("Não foi possível excluir este cartão, id inexistente no banco de dados.");
+            }
+
+            _db.Cartoes.Remove(cartao);
+            await _db.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Cartao>> ListarTodos()
+        public async Task<IEnumerable<CartaoDto>> ListarTodos()
         {
-            return await _db.Cartoes.ToListAsync();
+            var listaCartoes = await _db.Cartoes.ToListAsync();
+            return _mapper.Map<IEnumerable<CartaoDto>>(listaCartoes);
         }
 
-        public async Task<Cartao> ObtemPorId(int id)
+        public async Task<CartaoDto> ObtemPorId(int id)
         {
-            return await _db.Cartoes.FirstAsync(x => x.Id == id);
+            var cartao = await _db.Cartoes.FirstAsync(x => x.Id == id);
+            return _mapper.Map<CartaoDto>(cartao);
         }
     }
 }

@@ -5,7 +5,7 @@
         Task<TEntity> ObtemPorId(int id); 
         Task<IEnumerable<TEntity>> ListarTodos(); 
         Task<TEntity> Criar(TEntity entity);
-        Task<TEntity> Alterar(int id, TEntity entity);
-        Task<TEntity> Deletar(int id);
+        Task<TEntity> Alterar(TEntity entity);
+        Task Deletar(int id);
     }
 }

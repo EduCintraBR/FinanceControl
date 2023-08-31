@@ -1,4 +1,5 @@
-﻿using FinanceControl.Api.Services.IServices;
+﻿using FinanceControl.Api.Models.Dto;
+using FinanceControl.Api.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,59 @@ namespace FinanceControl.Api.Controllers
             try
             {
                 return Ok(await _cartaoService.ListarTodos());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            try
+            {
+                return Ok(await _cartaoService.ObtemPorId(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(CartaoDto cartaoDto)
+        {
+            try
+            {
+                return Ok(await _cartaoService.Criar(cartaoDto));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(CartaoDto cartaoDto)
+        {
+            try
+            {
+                return Ok(await _cartaoService.Alterar(cartaoDto));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                await _cartaoService.Deletar(id);
+                return NoContent();
             }
             catch (Exception ex)
             {
