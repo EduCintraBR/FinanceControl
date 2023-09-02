@@ -1,4 +1,5 @@
-﻿using FinanceControl.Api.Models.Dto;
+﻿using FinanceControl.Api.Controllers.Util;
+using FinanceControl.Api.Models.Dto;
 using FinanceControl.Api.Services.IServices;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,67 +20,31 @@ namespace FinanceControl.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            try
-            {
-                return Ok(await _cartaoService.ListarTodos());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await ControllerUtil.GetAll<CartaoDto>(_cartaoService);
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                return Ok(await _cartaoService.ObtemPorId(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await ControllerUtil.Get<CartaoDto>(id, _cartaoService);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post(CartaoDto cartaoDto)
         {
-            try
-            {
-                return Ok(await _cartaoService.Criar(cartaoDto));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await ControllerUtil.Post(cartaoDto, _cartaoService);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put(CartaoDto cartaoDto)
         {
-            try
-            {
-                return Ok(await _cartaoService.Alterar(cartaoDto));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await ControllerUtil.Put(cartaoDto, _cartaoService);
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
-                await _cartaoService.Deletar(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return await ControllerUtil.Delete(id, _cartaoService);
         }
     }
 }
