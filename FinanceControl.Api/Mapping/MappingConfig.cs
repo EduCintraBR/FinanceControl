@@ -11,6 +11,7 @@ namespace FinanceControl.Api.Mapping
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<Cartao, CartaoDto>().ReverseMap();
+                config.CreateMap<Categoria, CategoriaDto>().ReverseMap();
             });
 
             return mappingConfig;
