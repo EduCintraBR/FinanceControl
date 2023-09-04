@@ -34,11 +34,19 @@ namespace FinanceControl.Api.Services
 
         public virtual async Task<ResponseResultDto<TDto>> Criar(TDto entity)
         {
-            var objToInsert = _mapper.Map<TPersistencia>(entity);
+            try
+            {
+                var objToInsert = _mapper.Map<TPersistencia>(entity);
 
-            var objAdded = await _db.Set<TPersistencia>().AddAsync(objToInsert);
-            await _db.SaveChangesAsync();
-            _responseResultDto.Result = _mapper.Map<TDto>(objAdded.Entity);
+                var objAdded = await _db.Set<TPersistencia>().AddAsync(objToInsert);
+                await _db.SaveChangesAsync();
+                _responseResultDto.Result = _mapper.Map<TDto>(objAdded.Entity);
+            }
+            catch (Exception ex)
+            {
+                _responseResultDto.IsSuccess = false;
+                _responseResultDto.Message = $"MessageError = {ex.Message} \n InnerMessageError = {ex.InnerException.Message}";
+            }
 
             return _responseResultDto;
         }

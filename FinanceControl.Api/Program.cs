@@ -24,6 +24,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<ICartaoService, CartaoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IParcelamentoService, ParcelamentoService>();
+builder.Services.AddScoped<IParcelaService, ParcelaService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
