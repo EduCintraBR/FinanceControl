@@ -12,7 +12,8 @@ namespace FinanceControl.Api.Models
 
         [ForeignKey(nameof(Parcela))]
         public int? CodParcela { get; set; }
-
         public Parcela? Parcela { get; set; }
+
+        public Controle Controle { get; set; }
     }
 }

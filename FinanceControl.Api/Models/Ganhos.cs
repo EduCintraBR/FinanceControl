@@ -7,5 +7,7 @@
         public string CategoriaOrigem { get; set; }
         public decimal Valor { get; set; }
         public bool EhFixo { get; set; }
+
+        public Controle Controle { get; set; }
     }
 }
