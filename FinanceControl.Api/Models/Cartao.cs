@@ -7,5 +7,7 @@
         public string NomeBanco { get; set; }
         public string NomeProprietario { get; set; }
         public int LimiteCartao { get; set; }
+
+        public ICollection<Parcelamento> Parcelamentos { get; set; }
     }
 }

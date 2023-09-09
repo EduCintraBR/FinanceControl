@@ -14,6 +14,9 @@ namespace FinanceControl.Api.Mapping
                 config.CreateMap<Categoria, CategoriaDto>().ReverseMap();
                 config.CreateMap<Parcelamento, ParcelamentoDto>().ReverseMap();
                 config.CreateMap<Parcela, ParcelaDto>().ReverseMap();
+                config.CreateMap<Ganhos, GanhosDto>().ReverseMap();
+                config.CreateMap<Custos, CustosDto>().ReverseMap();
+                config.CreateMap<Controle, ControleDto>().ReverseMap();
             });
 
             return mappingConfig;

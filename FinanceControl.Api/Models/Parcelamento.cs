@@ -16,5 +16,6 @@ namespace FinanceControl.Api.Models
         public string Responsavel { get; set; }
 
         public Cartao Cartao { get; set; }
+        public ICollection<Parcela> Parcelas { get; set; }
     }
 }

@@ -31,12 +31,10 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -52,12 +50,10 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -75,20 +71,11 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex")
-                        .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AppUser");
                 });
 
             modelBuilder.Entity("FinanceControl.Api.Models.Cartao", b =>
@@ -150,12 +137,6 @@ namespace FinanceControl.Api.Migrations
                     b.Property<short>("Ano")
                         .HasColumnType("smallint");
 
-                    b.Property<int>("CodCusto")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CodGanho")
-                        .HasColumnType("int");
-
                     b.Property<short>("Mes")
                         .HasColumnType("smallint");
 
@@ -176,10 +157,10 @@ namespace FinanceControl.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CodParcela")
+                    b.Property<int>("CodControle")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ControleId")
+                    b.Property<int?>("CodParcela")
                         .HasColumnType("int");
 
                     b.Property<bool>("EhParcelado")
@@ -189,14 +170,17 @@ namespace FinanceControl.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParcelaId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CodParcela");
+                    b.HasIndex("CodControle");
 
-                    b.HasIndex("ControleId");
+                    b.HasIndex("ParcelaId");
 
                     b.ToTable("Custos");
                 });
@@ -213,7 +197,7 @@ namespace FinanceControl.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ControleId")
+                    b.Property<int>("CodControle")
                         .HasColumnType("int");
 
                     b.Property<bool>("EhFixo")
@@ -228,7 +212,7 @@ namespace FinanceControl.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ControleId");
+                    b.HasIndex("CodControle");
 
                     b.ToTable("Ganhos");
                 });
@@ -240,6 +224,9 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CodCusto")
+                        .HasColumnType("int");
 
                     b.Property<int>("CodParcelamento")
                         .HasColumnType("int");
@@ -258,6 +245,10 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CodCusto");
+
+                    b.HasIndex("CodParcelamento");
 
                     b.ToTable("Parcela");
                 });
@@ -303,25 +294,17 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -339,14 +322,11 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RoleId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("RoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -364,14 +344,11 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("UserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -386,14 +363,11 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("UserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -406,9 +380,7 @@ namespace FinanceControl.Api.Migrations
 
                     b.HasKey("UserId", "RoleId");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -427,33 +399,60 @@ namespace FinanceControl.Api.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("UserTokens");
                 });
 
             modelBuilder.Entity("FinanceControl.Api.Models.Custos", b =>
                 {
+                    b.HasOne("FinanceControl.Api.Models.Controle", "Controle")
+                        .WithMany("ListaCustos")
+                        .HasForeignKey("CodControle")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("FinanceControl.Api.Models.Parcela", "Parcela")
                         .WithMany()
-                        .HasForeignKey("CodParcela");
+                        .HasForeignKey("ParcelaId");
 
-                    b.HasOne("FinanceControl.Api.Models.Controle", null)
-                        .WithMany("ListaCustos")
-                        .HasForeignKey("ControleId");
+                    b.Navigation("Controle");
 
                     b.Navigation("Parcela");
                 });
 
             modelBuilder.Entity("FinanceControl.Api.Models.Ganhos", b =>
                 {
-                    b.HasOne("FinanceControl.Api.Models.Controle", null)
+                    b.HasOne("FinanceControl.Api.Models.Controle", "Controle")
                         .WithMany("ListaGanhos")
-                        .HasForeignKey("ControleId");
+                        .HasForeignKey("CodControle")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Controle");
+                });
+
+            modelBuilder.Entity("FinanceControl.Api.Models.Parcela", b =>
+                {
+                    b.HasOne("FinanceControl.Api.Models.Custos", "Custos")
+                        .WithMany("Parcelas")
+                        .HasForeignKey("CodCusto")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FinanceControl.Api.Models.Parcelamento", "Parcelamento")
+                        .WithMany("Parcelas")
+                        .HasForeignKey("CodParcelamento")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Custos");
+
+                    b.Navigation("Parcelamento");
                 });
 
             modelBuilder.Entity("FinanceControl.Api.Models.Parcelamento", b =>
                 {
                     b.HasOne("FinanceControl.Api.Models.Cartao", "Cartao")
-                        .WithMany()
+                        .WithMany("Parcelamentos")
                         .HasForeignKey("CodCartao")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -461,55 +460,9 @@ namespace FinanceControl.Api.Migrations
                     b.Navigation("Cartao");
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
+            modelBuilder.Entity("FinanceControl.Api.Models.Cartao", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
-                {
-                    b.HasOne("FinanceControl.Api.Models.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
-                {
-                    b.HasOne("FinanceControl.Api.Models.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("FinanceControl.Api.Models.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
-                {
-                    b.HasOne("FinanceControl.Api.Models.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Parcelamentos");
                 });
 
             modelBuilder.Entity("FinanceControl.Api.Models.Controle", b =>
@@ -517,6 +470,16 @@ namespace FinanceControl.Api.Migrations
                     b.Navigation("ListaCustos");
 
                     b.Navigation("ListaGanhos");
+                });
+
+            modelBuilder.Entity("FinanceControl.Api.Models.Custos", b =>
+                {
+                    b.Navigation("Parcelas");
+                });
+
+            modelBuilder.Entity("FinanceControl.Api.Models.Parcelamento", b =>
+                {
+                    b.Navigation("Parcelas");
                 });
 #pragma warning restore 612, 618
         }
