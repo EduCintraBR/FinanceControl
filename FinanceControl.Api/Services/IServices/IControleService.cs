@@ -5,6 +5,5 @@ namespace FinanceControl.Api.Services.IServices
 {
     public interface IControleService : IBaseService<ControleDto>
     {
-        Task<ResponseListDto<IEnumerable<CustosDto>>> ObtemListaDeCustosPorIdControle(int codControle);
     }
 }

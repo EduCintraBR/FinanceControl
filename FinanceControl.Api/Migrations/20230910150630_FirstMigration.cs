@@ -195,42 +195,17 @@ namespace FinanceControl.Api.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CodControle = table.Column<int>(type: "int", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoriaOrigem = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    EhFixo = table.Column<bool>(type: "bit", nullable: false)
+                    EhFixo = table.Column<bool>(type: "bit", nullable: false),
+                    CodControle = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Ganhos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Ganhos_Controles_CodControle",
-                        column: x => x.CodControle,
-                        principalTable: "Controles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Custos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoriaOrigem = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    EhParcelado = table.Column<bool>(type: "bit", nullable: false),
-                    CodParcela = table.Column<int>(type: "int", nullable: true),
-                    ParcelaId = table.Column<int>(type: "int", nullable: true),
-                    CodControle = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Custos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Custos_Controles_CodControle",
                         column: x => x.CodControle,
                         principalTable: "Controles",
                         principalColumn: "Id",
@@ -254,15 +229,38 @@ namespace FinanceControl.Api.Migrations
                 {
                     table.PrimaryKey("PK_Parcela", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Parcela_Custos_CodCusto",
-                        column: x => x.CodCusto,
-                        principalTable: "Custos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Parcela_Parcelamento_CodParcelamento",
                         column: x => x.CodParcelamento,
                         principalTable: "Parcelamento",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Custos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoriaOrigem = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EhParcelado = table.Column<bool>(type: "bit", nullable: false),
+                    CodParcela = table.Column<int>(type: "int", nullable: true),
+                    CodControle = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Custos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Custos_Controles_CodControle",
+                        column: x => x.CodControle,
+                        principalTable: "Controles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Custos_Parcela_Id",
+                        column: x => x.Id,
+                        principalTable: "Parcela",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -273,19 +271,9 @@ namespace FinanceControl.Api.Migrations
                 column: "CodControle");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Custos_ParcelaId",
-                table: "Custos",
-                column: "ParcelaId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Ganhos_CodControle",
                 table: "Ganhos",
                 column: "CodControle");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Parcela_CodCusto",
-                table: "Parcela",
-                column: "CodCusto");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Parcela_CodParcelamento",
@@ -296,31 +284,19 @@ namespace FinanceControl.Api.Migrations
                 name: "IX_Parcelamento_CodCartao",
                 table: "Parcelamento",
                 column: "CodCartao");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Custos_Parcela_ParcelaId",
-                table: "Custos",
-                column: "ParcelaId",
-                principalTable: "Parcela",
-                principalColumn: "Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Custos_Controles_CodControle",
-                table: "Custos");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Custos_Parcela_ParcelaId",
-                table: "Custos");
-
             migrationBuilder.DropTable(
                 name: "AppUser");
 
             migrationBuilder.DropTable(
                 name: "Categorias");
+
+            migrationBuilder.DropTable(
+                name: "Custos");
 
             migrationBuilder.DropTable(
                 name: "Ganhos");
@@ -344,13 +320,10 @@ namespace FinanceControl.Api.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Controles");
-
-            migrationBuilder.DropTable(
                 name: "Parcela");
 
             migrationBuilder.DropTable(
-                name: "Custos");
+                name: "Controles");
 
             migrationBuilder.DropTable(
                 name: "Parcelamento");

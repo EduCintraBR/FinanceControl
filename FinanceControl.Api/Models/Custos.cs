@@ -14,6 +14,7 @@ namespace FinanceControl.Api.Models
 
         public bool EhParcelado { get; set; }
 
+        [ForeignKey(nameof(Parcela))]
         public int? CodParcela { get; set; }
 
         public Parcela? Parcela { get; set; }
@@ -22,8 +23,6 @@ namespace FinanceControl.Api.Models
         public int CodControle { get; set; }
 
         public Controle Controle { get; set; }
-
-        public ICollection<Parcela> Parcelas { get; set; }
     }
 
 }

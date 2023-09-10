@@ -1,5 +1,6 @@
 ﻿using FinanceControl.Api.Controllers.Util;
 using FinanceControl.Api.Models.Dto;
+using FinanceControl.Api.Services;
 using FinanceControl.Api.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,6 +27,17 @@ namespace FinanceControl.Api.Controllers.Custos
         public async Task<IActionResult> Get(int id)
         {
             return await ControllerUtil.Get(id, _custosService);
+        }
+
+        [HttpGet("obtem-custos-por-id/{codControle:int}")]
+        public async Task<IActionResult> GetCustosByCodControle(int codControle)
+        {
+            var resultado = await _custosService.ObtemListaDeCustosPorIdControle(codControle);
+
+            if (!resultado.IsSuccess)
+                return BadRequest(resultado.Message);
+
+            return Ok(resultado);
         }
 
         [HttpPost]

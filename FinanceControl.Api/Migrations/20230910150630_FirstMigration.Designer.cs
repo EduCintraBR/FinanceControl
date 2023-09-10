@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinanceControl.Api.Migrations
 {
     [DbContext(typeof(FCDbContext))]
-    [Migration("20230905193548_FirstMigration")]
+    [Migration("20230910150630_FirstMigration")]
     partial class FirstMigration
     {
         /// <inheritdoc />
@@ -151,10 +151,7 @@ namespace FinanceControl.Api.Migrations
             modelBuilder.Entity("FinanceControl.Api.Models.Custos", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CategoriaOrigem")
                         .IsRequired()
@@ -173,17 +170,12 @@ namespace FinanceControl.Api.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ParcelaId")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CodControle");
-
-                    b.HasIndex("ParcelaId");
 
                     b.ToTable("Custos");
                 });
@@ -248,8 +240,6 @@ namespace FinanceControl.Api.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CodCusto");
 
                     b.HasIndex("CodParcelamento");
 
@@ -414,8 +404,10 @@ namespace FinanceControl.Api.Migrations
                         .IsRequired();
 
                     b.HasOne("FinanceControl.Api.Models.Parcela", "Parcela")
-                        .WithMany()
-                        .HasForeignKey("ParcelaId");
+                        .WithOne("Custos")
+                        .HasForeignKey("FinanceControl.Api.Models.Custos", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Controle");
 
@@ -435,19 +427,11 @@ namespace FinanceControl.Api.Migrations
 
             modelBuilder.Entity("FinanceControl.Api.Models.Parcela", b =>
                 {
-                    b.HasOne("FinanceControl.Api.Models.Custos", "Custos")
-                        .WithMany("Parcelas")
-                        .HasForeignKey("CodCusto")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("FinanceControl.Api.Models.Parcelamento", "Parcelamento")
                         .WithMany("Parcelas")
                         .HasForeignKey("CodParcelamento")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Custos");
 
                     b.Navigation("Parcelamento");
                 });
@@ -475,9 +459,10 @@ namespace FinanceControl.Api.Migrations
                     b.Navigation("ListaGanhos");
                 });
 
-            modelBuilder.Entity("FinanceControl.Api.Models.Custos", b =>
+            modelBuilder.Entity("FinanceControl.Api.Models.Parcela", b =>
                 {
-                    b.Navigation("Parcelas");
+                    b.Navigation("Custos")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("FinanceControl.Api.Models.Parcelamento", b =>

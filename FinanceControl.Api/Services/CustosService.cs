@@ -2,7 +2,9 @@
 using FinanceControl.Api.Data;
 using FinanceControl.Api.Models;
 using FinanceControl.Api.Models.Dto;
+using FinanceControl.Api.Models.Dto.Response;
 using FinanceControl.Api.Services.IServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceControl.Api.Services
 {
@@ -15,6 +17,14 @@ namespace FinanceControl.Api.Services
         {
             _dbContext = dbContext;
             _mapper = mapper;
+        }
+
+        public async Task<ResponseListDto<CustosDto>> ObtemListaDeCustosPorIdControle(int codControle)
+        {
+            var response = new ResponseListDto<CustosDto>();
+            var custos = await _dbContext.Custos.Where(c => c.CodControle == codControle).ToListAsync();
+            response.List = _mapper.Map<IEnumerable<CustosDto>>(custos);
+            return response;
         }
     }
 }

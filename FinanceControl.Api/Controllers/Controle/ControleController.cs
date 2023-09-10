@@ -24,17 +24,6 @@ namespace FinanceControl.Api.Controllers.Controle
             return await ControllerUtil.GetAll(_controleService);
         }
 
-        [HttpGet("obtem-ganhos-por-id/{codControle:int}")]
-        public async Task<IActionResult> GetGanhosByCodControle(int codControle)
-        {
-            var resultado = await _controleService.ObtemListaDeCustosPorIdControle(codControle);
-
-            if (!resultado.IsSuccess)
-                return BadRequest(resultado.Message);
-
-            return Ok(resultado);
-        }
-
         [HttpGet("{id:int}")]
         public async Task<IActionResult> Get(int id)
         {

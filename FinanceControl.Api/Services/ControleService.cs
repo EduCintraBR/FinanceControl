@@ -4,6 +4,7 @@ using FinanceControl.Api.Models;
 using FinanceControl.Api.Models.Dto;
 using FinanceControl.Api.Models.Dto.Response;
 using FinanceControl.Api.Services.IServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinanceControl.Api.Services
 {
@@ -15,11 +16,6 @@ namespace FinanceControl.Api.Services
         {
             _dbContext = db;
             _mapper = mapper;
-        }
-
-        public async Task<ResponseListDto<IEnumerable<CustosDto>>> ObtemListaDeCustosPorIdControle(int codControle)
-        {
-            throw new NotImplementedException();
         }
     }
 }

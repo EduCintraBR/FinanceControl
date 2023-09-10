@@ -20,6 +20,10 @@ namespace FinanceControl.Api.Data
                 .WithMany(c => c.ListaCustos)
                 .HasForeignKey(c => c.CodControle);
 
+            modelBuilder.Entity<Custos>()
+                .HasOne(c => c.Parcela)
+                .WithOne(c => c.Custos);
+
             modelBuilder.Entity<Ganhos>()
                 .HasOne(c => c.Controle)
                 .WithMany(c => c.ListaGanhos)
@@ -27,8 +31,7 @@ namespace FinanceControl.Api.Data
 
             modelBuilder.Entity<Parcela>()
                 .HasOne(p => p.Custos)
-                .WithMany(c => c.Parcelas)
-                .HasForeignKey(p => p.CodCusto);
+                .WithOne(p => p.Parcela);
 
             modelBuilder.Entity<Parcela>()
                 .HasOne(p => p.Parcelamento)
